@@ -1,7 +1,7 @@
-export function *counter(start = 1, inc = 1) {
+export function* counter(start = 1, inc = 1) {
     let n = start
 
-    while(true) {
+    while (true) {
         yield n
         n += inc
     }
@@ -15,26 +15,33 @@ export function range(max: number): number[] {
     return Array.from({ length: max }, (_, i) => i + 1)
 }
 
-export function *range2(max: number, inc: number = 1) {
-    const couterIterator = counter(0, inc)
+export function* range2(max: number, inc: number = 1) {
+    const couterIterator = counter(1, inc)
     let n = couterIterator.next()
     yield n.value
 
-    while(n.value < max) {
+    while (n.value < max) {
         n = couterIterator.next()
         yield n.value
     }
 }
 
-export function *range3(max: number, inc: number = 1) {
-    const counterIter = counter(0, inc)
-
-    let res
-
-    res = yield* counterIter
+export function* rangeWrapper(iter: Generator) {
+    yield -1
+    yield* iter
+    yield 100
 }
 
-export function *generatorLifecye() {
+export function* range4(max: number, inc: number = 0) {
+    for (let n of counter(1, inc)) {
+        if (n > max) {
+            break
+        }
+        yield n
+    }
+}
+
+export function* generatorLifecye() {
     console.log('Gen: ', "Started")
 
     let input = yield 1
@@ -54,10 +61,71 @@ export function delay(ms: number = 0): Promise<void> {
     })
 }
 
-export async function *asyncGenerator() {
+export async function* asyncGenerator() {
     yield 1
-    await delay(2000)
+    await delay(1000)
     yield 2
-    await delay(2000)
+    await delay(1000)
     yield 3
+    await delay(1000)
+    return 4
+}
+
+// Fibonacci
+// [1,1,2,3,5,8,13,21,44,....]
+export function fib(max: number): number[] {
+    const ns: number[] = []
+
+    let current = 0
+    let next = 1
+
+    for (let i = 0; i < max; i++) {
+        ns.push(current);
+        [current, next] = [next, next + current]
+    }
+
+    return ns
+}
+
+
+/**
+ * Fibonaccie sequence
+ * Infinite generator
+ */
+export function* fibGen() {
+    let current = 0
+    let next = 1
+
+    while (true) {
+        let reset = yield current;
+        [current, next] = [next, next + current]
+
+        if (reset) {
+            current = 0
+            next = 1
+        }
+    }
+}
+
+/**
+ * Fibonacci sequence with max limit
+ *
+ * @param iters Number of values in fibonacci sequence to computer
+ */
+export function* fixIter(iters?: number) {
+    const fib2Iter = fibGen()
+
+    if (typeof iters !== 'number') {
+        yield* fib2Iter
+        return
+    }
+
+    if (iters < 0) {
+        throw new Error(`n must be greater than 0`)
+    }
+
+    for (let i = 0; i < iters; i++) {
+        let res = fib2Iter.next()
+        yield res.value
+    }
 }
