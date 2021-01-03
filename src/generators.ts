@@ -15,25 +15,15 @@ export function range(max: number): number[] {
     return Array.from({ length: max }, (_, i) => i + 1)
 }
 
-export function* range2(max: number, inc: number = 1) {
-    const couterIterator = counter(1, inc)
-    let n = couterIterator.next()
-    yield n.value
-
-    while (n.value < max) {
-        n = couterIterator.next()
-        yield n.value
-    }
-}
-
 export function* rangeWrapper(iter: Generator) {
     yield -1
     yield* iter
     yield 100
 }
 
-export function* range4(max: number, inc: number = 0) {
-    for (let n of counter(1, inc)) {
+export function* rangeGen(max: number, inc: number = 0) {
+    const iter = counter(1, inc)
+    for (let n of iter) {
         if (n > max) {
             break
         }
@@ -55,16 +45,15 @@ export function* generatorLifecye() {
     return 10 + input2
 }
 
-export function delay(ms: number = 0): Promise<void> {
-    return new Promise((res, rej) => {
-        setTimeout(() => res(), ms)
+export function delay(ms: number = 0, val: number = 0) {
+    return new Promise((res) => {
+        setTimeout(() => { res(val) }, ms)
     })
 }
 
 export async function* asyncGenerator() {
-    yield 1
-    await delay(1000)
-    yield 2
+    yield delay(1000, 1)
+    yield delay(1000, 2)
     await delay(1000)
     yield 3
     await delay(1000)

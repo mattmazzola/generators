@@ -31,3 +31,7 @@ We know by using `return` we can make value non-undefined with done: true, but a
 It returns value once then always undefined
 
 
+## Notes:
+
+When you auto run an iterator using for-or or for-await-of, it directly gets the values instead of the result objects
+
