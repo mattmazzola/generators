@@ -21,7 +21,7 @@ export function* rangeWrapper(iter: Generator) {
     yield 100
 }
 
-export function* rangeGen(max: number, inc: number = 1) {
+export function* rangeForOf(max: number, inc: number = 1) {
     const iter = counter(1, inc)
     for (let n of iter) {
         if (n > max) {
@@ -31,17 +31,17 @@ export function* rangeGen(max: number, inc: number = 1) {
     }
 }
 
-export function* generatorLifecye() {
-    console.log('Gen: ', "Started")
+export function* generatorLifecycle(debug = false) {
+    debug && console.log('Gen: ', "Started")
 
     let input = yield 1
-    console.log('Gen: ', { input })
+    debug && console.log('Gen: ', { input })
     let input2 = yield 2 + input
-    console.log('Gen: ', { input2 })
+    debug && console.log('Gen: ', { input2 })
 
     yield 3
 
-    console.log('Gen: ', "Done")
+    debug && console.log('Gen: ', "Done")
     return 10 + input2
 }
 

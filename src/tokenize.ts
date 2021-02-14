@@ -3,13 +3,13 @@ export function tokenize(s: string): string[] {
 }
 
 const vocab: Record<string, number> = {
-    "<UNK>": 1,
-    "<EOS>": 0,
-    "<SOS>": 2,
-    "how": 1,
-    "do": 2,
-    "generators": 3,
-    "work": 4,
+    "<UNK>": 0,
+    "<SOS>": 1,
+    "<EOS>": 2,
+    "how": 3,
+    "do": 4,
+    "generators": 5,
+    "work": 6,
 }
 
 export function *processTokens(tokenIter: Iterable<string>) {
