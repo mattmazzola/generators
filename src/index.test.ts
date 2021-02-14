@@ -1,29 +1,50 @@
 import * as gs from './generators'
 import * as tok from './tokenize'
 
-// // Basic manual counter execution
-// const counter1 = gs.counter(3,3)
+describe('Generators', () => {
+    describe('Basic manual counter execution', () => {
+        test('counter will print out successively increasing values', () => {
+            const counter1 = gs.counter(3,3)
+            
+            let vals = []
+            vals.push(counter1.next())
+            vals.push(counter1.next())
+            vals.push(counter1.next())
+            vals.push(counter1.return())
 
-// let val
-// val = counter1.next()
-// console.log({ val })
-// val = counter1.next()
-// console.log({ val })
-// val = counter1.next()
-// console.log({ val })
-// val = counter1.return()
-// console.log({ val })
+            const expected = [
+                { value: 3, done: false },
+                { value: 6, done: false },
+                { value: 9, done: false },
+                { value: undefined, done: true },
+            ];
 
-// // Generator using other generator with limits
-// const rangeArray = gs.range(5)
-// console.log({ range: rangeArray })
+            expect(expected).toEqual(vals);
+        })
+    })
 
-// const rangeIter = gs.rangeGen(10)
-// console.log({ range: [...rangeIter] })
+    describe('Generator using other generator with limits', () => {
+        test('range array', () => {
+            const rangeArray = gs.range(5)
+            const expected = [1,2,3,4,5]
+            expect(expected).toEqual(rangeArray);
+        })
 
-// // Generator using yield* within
-// const rangeWrapped = gs.rangeWrapper(gs.rangeGen(7, 1))
-// console.log({ range: [...rangeWrapped ]})
+        test('range iterator', () => {
+            const rangeIter = gs.rangeGen(10)
+            const expected = [1,2,3,4,5,6,7,8,9,10]
+            expect(expected).toEqual([...rangeIter])
+        })
+    })
+
+    describe('Generator using yield* within', () => {
+        test('nested generator exhausted and wrapped', () => {
+            const rangeWrapped = gs.rangeWrapper(gs.rangeGen(7, 1))
+            const expected = [-1, 1,2,3,4,5,6,7, 100]
+            expect(expected).toEqual([...rangeWrapped])
+        }) 
+    })
+})
 
 // // Generator using for of to run other generator
 // const range7 = gs.range4(10, 1)
@@ -145,14 +166,16 @@ import * as tok from './tokenize'
 // console.log({ fib: [...fib2] })
 
 
-const inputString = "How do generators work?"
-console.log(inputString)
-const tokenized = tok.tokenize(inputString)
-console.log({ tokenized })
-const processedIter = tok.processTokens(tokenized)
-// console.log({ processTokens: [...processedIter] })
-const vocabIter = tok.vocabValues(processedIter)
-console.log({ vocabsTokens: [...vocabIter] })
+// const inputString = "How do generators work?"
+// console.log(inputString)
+// const tokenized = tok.tokenize(inputString)
+// console.log({ tokenized })
+// const processedIter = tok.processTokens(tokenized)
+// // console.log({ processTokens: [...processedIter] })
+// const vocabIter = tok.vocabValues(processedIter)
+// console.log({ vocabsTokens: [...vocabIter] })
 
-// const vocabIter2 = tok.vocabValues(['adf', 'adf', 'asdf'])
+// // const vocabIter2 = tok.vocabValues(['adf', 'adf', 'asdf'])
 // console.log({ vocabsTokens: [...vocabIter2] })
+
+

@@ -21,7 +21,7 @@ export function* rangeWrapper(iter: Generator) {
     yield 100
 }
 
-export function* rangeGen(max: number, inc: number = 0) {
+export function* rangeGen(max: number, inc: number = 1) {
     const iter = counter(1, inc)
     for (let n of iter) {
         if (n > max) {
@@ -61,7 +61,7 @@ export async function* asyncGenerator() {
 }
 
 // Fibonacci
-// [1,1,2,3,5,8,13,21,44,....]
+// [0,1,1,2,3,5,8,13,21,44,....]
 export function fib(max: number): number[] {
     const ns: number[] = []
 
@@ -78,7 +78,7 @@ export function fib(max: number): number[] {
 
 
 /**
- * Fibonaccie sequence
+ * Fibonacci sequence
  * Infinite generator
  */
 export function* fibGen() {
